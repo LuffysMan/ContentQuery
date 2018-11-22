@@ -1,0 +1,32 @@
+AVX是什么：
+https://blog.csdn.net/sujunzy666/article/details/21170705/
+https://blog.csdn.net/Reformatsky/article/details/69388772
+http://www.cnblogs.com/zyl910/archive/2012/10/22/simdsumfloat.html
+视频帧处理
+http://lib.csdn.net/article/opencv/30209
+https://blog.csdn.net/ffdeff/article/details/80054733
+使用OPENCV实现人脸检测和人脸识别
+https://www.cnblogs.com/cheungxiongwei/articles/7636423.html
+OpenCV图像识别-模板匹配
+https://blog.csdn.net/csm1972385274/article/details/79711908
+
+11/8 mask rcnn
+https://github.com/matterport/Mask_RCNN
+https://blog.csdn.net/l297969586/article/details/79140840
+https://blog.csdn.net/qq_15192373/article/details/81213909
+https://blog.csdn.net/qq_15192373/article/details/81697753
+http://www.cnblogs.com/herd/p/9364911.html
+6.Mask_RCNN实现批量测试并保存测试结果到文件夹内
+	https://blog.csdn.net/yql_617540298/article/details/81123147
+预训练权重
+https://github.com/LuffysMan/Mask_RCNN
+MMX/SSE/AVX使用手册
+https://software.intel.com/sites/landingpage/IntrinsicsGuide/#expand=954,950,3108,950,4872,4873,4874,4875,4881,659,2895,3660,159,79,2395,15,25,24,5331,124,5554&othertechs=XSS&techs=SSE
+
+MMX/SSE 基于C++的应用
+https://blog.csdn.net/gengshenghong/article/details/7008704
+基于SSE4和多核编程的电子相册的实现
+https://blog.csdn.net/lyj2018gyq/article/details/82057108
+
+
+
