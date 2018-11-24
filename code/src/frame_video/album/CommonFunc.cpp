@@ -56,6 +56,53 @@ void listFiles(char * dir, vector<char*>& vecSzFilename)
 	//cout << "Done!\n";
 	_findclose(handle);    // 关闭搜索句柄
 }
+//枚举指定路径下文件夹
+void listDir(char * dir, vector<char*>& vecSzDir)
+{
+	char szDir[_MAX_PATH] = { 0 };
+	sprintf_s(szDir, _MAX_PATH, "%s%s", dir, "*.*");			//遍历前加上通配符
+	intptr_t handle;
+	_finddata_t findData;
+
+	handle = _findfirst(szDir, &findData);    // 查找目录中的第一个文件
+	if (handle == -1)
+	{
+		cout << "Failed to find first file!\n";
+		return;
+	}
+	do
+	{
+		if (findData.attrib & _A_SUBDIR && 
+			strcmp(findData.name, ".") != 0 &&
+			strcmp(findData.name, "..") != 0)// 只关注子目录
+		{
+			cout << findData.name << "\t<dir>\n";
+			char* pBuffer = new char[_MAX_PATH]();
+			sprintf_s(pBuffer, _MAX_PATH, "%s%s%s", dir, findData.name, "\\");
+			vecSzDir.push_back(pBuffer);
+		}
+		else
+		{
+			////cout << findData.name << "\t" << findData.size << endl;
+			//char* pBuffer = new char[_MAX_PATH]();
+			//sprintf_s(pBuffer, _MAX_PATH, "%s%s", dir, findData.name);
+			//vecSzFilename.push_back(pBuffer);
+		}
+	} while (_findnext(handle, &findData) == 0);    // 查找目录中的下一个文件
+	_findclose(handle);    // 关闭搜索句柄
+}
+
+void releasePointVec(vector<char*>& vecBuffer)
+{
+	for (vector<char*>::iterator iter = vecBuffer.begin(); iter != vecBuffer.end(); ++iter)
+	{
+		if (NULL != *iter)
+		{
+			delete[] * iter;
+		}
+	}
+	vecBuffer.clear();
+}
 
 int getWorkDir(char* szProgramPath)
 {

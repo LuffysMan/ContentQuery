@@ -22,7 +22,6 @@ http://www.cnblogs.com/herd/p/9364911.html
 https://github.com/LuffysMan/Mask_RCNN
 MMX/SSE/AVX使用手册
 https://software.intel.com/sites/landingpage/IntrinsicsGuide/#expand=954,950,3108,950,4872,4873,4874,4875,4881,659,2895,3660,159,79,2395,15,25,24,5331,124,5554&othertechs=XSS&techs=SSE
-
 MMX/SSE 基于C++的应用
 https://blog.csdn.net/gengshenghong/article/details/7008704
 基于SSE4和多核编程的电子相册的实现

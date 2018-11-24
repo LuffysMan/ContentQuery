@@ -7,6 +7,8 @@ using namespace std;
 
 int importImages(char* dir, vector<Mat>& vecMat);
 void listFiles(char* dir, vector<char*>& vecSzFilename);
+void listDir(char* dir, vector<char*>& vecSzDir);
+void releasePointVec(vector<char*>& vecBuffer);
 int getWorkDir(char* szProgramPath);
 double getSpecificTime();
 

@@ -88,7 +88,7 @@ void imgFusionSSE_OMP(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 	xmm0 = _mm_set_epi16(fade, fade, fade, fade, fade, fade, fade, fade);	//8个fade因子装入寄存器
 	int nBlocks = nMemSize / 8;						//按8byte分块数量
 	int nRem = nMemSize % 8;						//剩余bytes
-#pragma	omp parallel for
+#pragma	omp parallel for num_threads(8)
 	for (int i = 0; i < nBlocks; ++i)
 	{
 		//memcpy(pByte1, pBuffer1 + i * 8, 8);
@@ -134,6 +134,7 @@ void imgFusionSSE_OMP(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 
 void imgFusionNormal(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 {
+#pragma region MyRegion
 	uchar* pBuffer1 = NULL;
 	uchar* pBuffer2 = NULL;
 	int nWidth = 0;
@@ -141,6 +142,7 @@ void imgFusionNormal(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 	int nBandNum = 0;
 	int nBPB = 0;
 	size_t nMemSize = 0;
+#pragma endregion
 	//将opencv Mat类型转为无符号数组进行处理
 	TransMatToBuffer(src1, pBuffer1, nWidth, nHeight, nBandNum, nBPB, nMemSize);
 	TransMatToBuffer(src2, pBuffer2, nWidth, nHeight, nBandNum, nBPB, nMemSize);
@@ -150,8 +152,8 @@ void imgFusionNormal(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 	{
 		*(pBuffer3 + i) = uchar((*(pBuffer1 + i) - *(pBuffer2 + i))*alpha + *(pBuffer2 + i));
 	}
-
 	dst = TransBufferToMat(pBuffer3, nWidth, nHeight, nBandNum, nBPB);		//将处理完毕的无符号数组转为opencv Mat类型
+#pragma region MyRegion
 	if (NULL != pBuffer1)
 	{
 		delete[] pBuffer1;
@@ -164,16 +166,58 @@ void imgFusionNormal(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 	{
 		delete[] pBuffer3;
 	}
+#pragma endregion
 }
 
-void imgFusionBigLoop(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
+void imgFusionNormal_OMP(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 {
+#pragma region MyRegion
 	uchar* pBuffer1 = NULL;
 	uchar* pBuffer2 = NULL;
 	int nWidth = 0;
 	int nHeight = 0;
 	int nBandNum = 0;
 	int nBPB = 0;
+#pragma endregion
+	size_t nMemSize = 0;
+	//将opencv Mat类型转为无符号数组进行处理
+	TransMatToBuffer(src1, pBuffer1, nWidth, nHeight, nBandNum, nBPB, nMemSize);
+	TransMatToBuffer(src2, pBuffer2, nWidth, nHeight, nBandNum, nBPB, nMemSize);
+	//矩阵运算，两个图像融合
+	uchar* pBuffer3 = new uchar[nMemSize]();								//()表默认初始化为0
+#pragma	omp parallel for num_threads(8)
+	for (int i = 0; i < nMemSize; ++i)
+	{
+		*(pBuffer3 + i) = uchar((*(pBuffer1 + i) - *(pBuffer2 + i))*alpha + *(pBuffer2 + i));
+	}
+
+	dst = TransBufferToMat(pBuffer3, nWidth, nHeight, nBandNum, nBPB);		//将处理完毕的无符号数组转为opencv Mat类型
+#pragma region MyRegion
+	if (NULL != pBuffer1)
+	{
+		delete[] pBuffer1;
+	}
+	if (NULL != pBuffer2)
+	{
+		delete[] pBuffer2;
+	}
+	if (NULL != pBuffer3)
+	{
+		delete[] pBuffer3;
+	}
+#pragma endregion
+}
+
+void imgFusionLongStep(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
+{
+#pragma region MyRegion
+	uchar* pBuffer1 = NULL;
+	uchar* pBuffer2 = NULL;
+	int nWidth = 0;
+	int nHeight = 0;
+	int nBandNum = 0;
+	int nBPB = 0;
+#pragma endregion
 	size_t nMemSize = 0;
 	//将opencv Mat类型转为无符号数组进行处理
 	TransMatToBuffer(src1, pBuffer1, nWidth, nHeight, nBandNum, nBPB, nMemSize);
@@ -200,6 +244,7 @@ void imgFusionBigLoop(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 		*(pBuffer3 + i) = uchar((*(pBuffer1 + i) - *(pBuffer2 + i))*alpha + *(pBuffer2 + i));
 	}
 	dst = TransBufferToMat(pBuffer3, nWidth, nHeight, nBandNum, nBPB);		//将处理完毕的无符号数组转为opencv Mat类型
+#pragma region MyRegion
 	if (NULL != pBuffer1)
 	{
 		delete[] pBuffer1;
@@ -212,6 +257,7 @@ void imgFusionBigLoop(cv::Mat src1, float alpha, cv::Mat src2, cv::Mat & dst)
 	{
 		delete[] pBuffer3;
 	}
+#pragma endregion
 }
 
 
